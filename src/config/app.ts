@@ -1,6 +1,6 @@
 export const APP_CONFIG = {
   PAYMENT: {
-    APPLICATION_FEE: 2,
+    APPLICATION_FEE: 50,
     CURRENCY: 'BDT',
   },
   
