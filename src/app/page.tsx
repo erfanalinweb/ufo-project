@@ -56,6 +56,7 @@ const HomePage = () => {
   const [success] = useState(false);
   const [paymentMessage, setPaymentMessage] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const validateField = (name: string, value: string | string[]) => {
     let error = '';
     if (typeof value === 'string' && value.trim() === '') {
@@ -95,7 +96,7 @@ const HomePage = () => {
       if (paymentStatus === 'failed') {
         setPaymentMessage('পেমেন্ট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
       } else if (paymentStatus === 'cancelled') {
-        setPaymentMessage('পেমেন্ট বাতিল করা হয়েছে।');
+        setPaymentMessage('পেমেন্ট বাতিল হয়েছে। পুনরায় চেষ্টা করুন।');
       } else if (paymentStatus === 'error') {
         setPaymentMessage('পেমেন্ট প্রক্রিয়ায় ত্রুটি হয়েছে।');
       }
@@ -120,8 +121,25 @@ const HomePage = () => {
 
     setErrors(newErrors);
 
+    // Check if there are any validation errors and show Bengali message
+    const errorCount = Object.values(newErrors).filter(err => err).length;
+    if (errorCount > 0) {
+        setSubmitError(`ফর্মটি জমা দেওয়ার আগে ${errorCount}টি ক্ষেত্র পূরণ করুন। লাল রঙে চিহ্নিত ক্ষেত্রগুলো সঠিকভাবে পূরণ করুন।`);
+        // Scroll to first error field
+        const firstErrorField = Object.keys(newErrors).find(key => newErrors[key]);
+        if (firstErrorField) {
+            const element = document.getElementById(firstErrorField);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.focus();
+            }
+        }
+        return;
+    }
+
     if (Object.values(newErrors).every(err => !err)) {
         setIsSubmitting(true);
+        setSubmitError(null); // Clear previous errors
         
         try {
             const response = await fetch('/api/form/submit', {
@@ -137,11 +155,26 @@ const HomePage = () => {
             if (result.success) {
                 window.location.href = result.bkashURL;
             } else {
-                throw new Error(result.message || 'Form submission failed');
+                // Handle different types of errors with Bengali messages
+                if (result.message?.includes('already exists') || result.message?.includes('duplicate')) {
+                    setSubmitError('এই এনআইডি নম্বর দিয়ে ইতিমধ্যে আবেদন করা হয়েছে। প্রতিটি এনআইডি দিয়ে শুধুমাত্র একবার আবেদন করা যাবে।');
+                } else if (result.message?.includes('validation') || result.message?.includes('required')) {
+                    setSubmitError('ফর্মের তথ্যে সমস্যা রয়েছে। সব ক্ষেত্র সঠিকভাবে পূরণ করুন এবং আবার চেষ্টা করুন।');
+                } else if (result.message?.includes('database') || result.message?.includes('connection')) {
+                    setSubmitError('ডেটাবেস সংযোগে সমস্যা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।');
+                } else if (result.message?.includes('payment') || result.message?.includes('bkash')) {
+                    setSubmitError('পেমেন্ট সিস্টেমে সমস্যা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।');
+                } else {
+                    setSubmitError('ফর্ম জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                }
             }
         } catch (error) {
             console.error('Form submission error:', error);
-            alert('ফর্ম জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                setSubmitError('ইন্টারনেট সংযোগে সমস্যা হয়েছে। আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন।');
+            } else {
+                setSubmitError('ফর্ম জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -704,6 +737,23 @@ const HomePage = () => {
               >
                 ✕
               </button>
+            </div>
+          )}
+
+          {submitError && (
+            <div className="mt-6 p-4 text-center text-lg font-semibold text-red-700 bg-red-100 rounded-lg border-l-4 border-red-500">
+              <div className="flex items-center justify-center space-x-2">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>{submitError}</span>
+                <button 
+                  onClick={() => setSubmitError(null)}
+                  className="ml-4 text-red-500 hover:text-red-700 font-bold"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
           )}
         </div>

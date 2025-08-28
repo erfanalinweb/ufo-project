@@ -35,7 +35,7 @@ async function createBkashPayment(token: string, amount: number, transactionId: 
   const paymentPayload = {
     mode: '0011',
     payerReference: transactionId.toString(),
-    callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/bkash/callback`,
+    callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, '')}/api/bkash/callback`,
     amount: amount.toFixed(2),
     currency: 'BDT',
     intent: 'sale',
