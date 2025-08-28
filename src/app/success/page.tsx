@@ -71,57 +71,74 @@ const SuccessPage = () => {
       </main>
 
       {/* Footer Section */}
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center md:text-left">
-            {/* Logo and About Section */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-1 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-              <Link href="/" title="Go to homepage">
+      <footer className="bg-gray-900 text-white py-12 border-t border-gray-700">
+        <div className="container mx-auto px-6 md:px-12 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {/* Organization Section */}
+            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+              <Link href="/" title="Go to homepage" className="transition-transform duration-300 hover:scale-105">
                 <Image
                   src="https://i.ibb.co/XrSYyycN/ngo-logo.png"
                   alt="United Forum Organisation Logo"
-                  width={100}
-                  height={100}
-                  className="h-16 md:h-20 object-contain"
+                  width={80}
+                  height={80}
+                  className="h-16 w-16 object-contain"
                   onError={(e) => { 
                     const target = e.target as HTMLImageElement;
                     target.onerror = null; 
-                    target.src = "https://placehold.co/100x100/E0E0E0/333333?text=Logo";
+                    target.src = "https://placehold.co/80x80/E0E0E0/333333?text=Logo";
                   }}
                 />
               </Link>
-              <div className="flex flex-col items-center md:items-start">
-                <h3 className="text-xl font-bold mb-2">United Forum Organisation</h3>
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-bold text-white mb-2 leading-tight">
+                  United Forum Organisation
+                </h3>
               </div>
             </div>
             
-            {/* Main Office */}
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Main Office</h4>
-              <p className="text-sm opacity-80">Amborkhana, Sylhet Sadar, Sylhet</p>
+            {/* Main Office Section */}
+            <div className="text-center">
+              <h4 className="font-semibold text-lg mb-4 text-white border-b border-gray-600 pb-2 inline-block">
+                Main Office
+              </h4>
+              <div className="space-y-2">
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  Amborkhana, Sylhet Sadar
+                </p>
+                <p className="text-sm text-gray-300">
+                  Sylhet, Bangladesh
+                </p>
+              </div>
             </div>
             
-            {/* Sub Offices */}
-            <div>
-              <h4 className="font-semibold text-lg mb-2">Sub Offices</h4>
-              <ul className="text-sm opacity-80 space-y-1">
-                <li>Sacna Bazar, Jamalganj, Sunamganj</li>
-                <li>Hazi Super Market, Dhormopasha, Sunamganj</li>
-                <li>Chatok, Sunamganj</li>
-              </ul>
-            </div>
-            
-            {/* Contact Info */}
-            <div>
-                <h4 className="font-semibold text-lg mb-2">Contact Us</h4>
-                <ul className="text-sm opacity-80 space-y-1">
-                    <li>Email: info@unitedforum.org</li>
-                    <li>Phone: +880 1234 567890</li>
-                </ul>
+            {/* Contact Section */}
+            <div className="text-center md:text-left">
+              <h4 className="font-semibold text-lg mb-4 text-white border-b border-gray-600 pb-2 inline-block">
+                Contact
+              </h4>
+              <div className="space-y-2">
+                <a 
+                  href="mailto:ufo.org.bd@gmail.com" 
+                  className="text-sm text-gray-300 hover:text-blue-400 transition-colors duration-300 inline-flex items-center space-x-2"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                  </svg>
+                  <span>ufo.org.bd@gmail.com</span>
+                </a>
+              </div>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-6 pt-4 text-center text-xs opacity-60">
-            &copy; {new Date().getFullYear()} United Forum Organisation. All Rights Reserved.
+          
+          {/* Copyright Section */}
+          <div className="border-t border-gray-700 mt-10 pt-6">
+            <div className="text-center">
+              <p className="text-xs text-gray-400 leading-relaxed">
+                &copy; {new Date().getFullYear()} United Forum Organisation. All Rights Reserved.
+              </p>
+            </div>
           </div>
         </div>
       </footer>
