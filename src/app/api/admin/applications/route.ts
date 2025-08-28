@@ -62,7 +62,6 @@ export async function GET(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('Error fetching applications:', error);
     return NextResponse.json(
       { success: false, message: 'Failed to fetch applications' },
       { status: 500 }

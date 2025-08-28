@@ -79,7 +79,6 @@ const AdminPage = () => {
         setApplications(data.applications);
       }
     } catch (error) {
-      console.error('Error fetching applications:', error);
     } finally {
       setLoading(false);
     }

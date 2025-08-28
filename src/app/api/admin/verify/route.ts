@@ -18,7 +18,6 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Token verification error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
       { status: 500 }

@@ -112,7 +112,6 @@ export async function POST(request: NextRequest) {
       throw new Error(data.statusMessage || 'Payment execution failed');
     }
   } catch (error) {
-    console.error('Error executing bKash payment:', error);
     return NextResponse.json(
       { success: false, message: error instanceof Error ? error.message : 'Payment execution failed' },
       { status: 500 }

@@ -103,6 +103,16 @@ const HomePage = () => {
       
       if (paymentStatus) {
         window.history.replaceState({}, '', window.location.pathname);
+        
+        setTimeout(() => {
+          const errorElement = document.querySelector('[data-payment-error]');
+          if (errorElement) {
+            errorElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+          }
+        }, 100);
       }
     }
   }, []);
@@ -121,11 +131,10 @@ const HomePage = () => {
 
     setErrors(newErrors);
 
-    // Check if there are any validation errors and show Bengali message
     const errorCount = Object.values(newErrors).filter(err => err).length;
     if (errorCount > 0) {
-        setSubmitError(`ফর্মটি জমা দেওয়ার আগে ${errorCount}টি ক্ষেত্র পূরণ করুন। লাল রঙে চিহ্নিত ক্ষেত্রগুলো সঠিকভাবে পূরণ করুন।`);
-        // Scroll to first error field
+        const bengaliErrorCount = toBengaliNumber(errorCount);
+        setSubmitError(`ফর্মটি জমা দেওয়ার আগে ${bengaliErrorCount} টি ক্ষেত্র পূরণ করুন। লাল রঙে চিহ্নিত ক্ষেত্রগুলো সঠিকভাবে পূরণ করুন।`);
         const firstErrorField = Object.keys(newErrors).find(key => newErrors[key]);
         if (firstErrorField) {
             const element = document.getElementById(firstErrorField);
@@ -139,7 +148,7 @@ const HomePage = () => {
 
     if (Object.values(newErrors).every(err => !err)) {
         setIsSubmitting(true);
-        setSubmitError(null); // Clear previous errors
+        setSubmitError(null);
         
         try {
             const response = await fetch('/api/form/submit', {
@@ -155,7 +164,6 @@ const HomePage = () => {
             if (result.success) {
                 window.location.href = result.bkashURL;
             } else {
-                // Handle different types of errors with Bengali messages
                 if (result.message?.includes('already exists') || result.message?.includes('duplicate')) {
                     setSubmitError('এই এনআইডি নম্বর দিয়ে ইতিমধ্যে আবেদন করা হয়েছে। প্রতিটি এনআইডি দিয়ে শুধুমাত্র একবার আবেদন করা যাবে।');
                 } else if (result.message?.includes('validation') || result.message?.includes('required')) {
@@ -169,7 +177,6 @@ const HomePage = () => {
                 }
             }
         } catch (error) {
-            console.error('Form submission error:', error);
             if (error instanceof TypeError && error.message.includes('fetch')) {
                 setSubmitError('ইন্টারনেট সংযোগে সমস্যা হয়েছে। আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন।');
             } else {
@@ -430,7 +437,6 @@ const HomePage = () => {
                     )}
                   </div>
                       
-                      {/* Address Information Fields */}
                   <div className="relative group">
                 <label htmlFor="village" className={labelStyle}>গ্রামের নাম (Village Name) <span className="text-red-500">*</span></label>
                 <input
@@ -445,7 +451,6 @@ const HomePage = () => {
                 {errors.village && <div className={errorStyle}>{errors.village}</div>}
               </div>
 
-              {/* 8. ইউনিয়নের নাম (Union Name) */}
               <div className="w-full">
                 <label htmlFor="unionName" className={labelStyle}>ইউনিয়নের নাম (Union Name) <span className="text-red-500">*</span></label>
                 <input
@@ -460,7 +465,6 @@ const HomePage = () => {
                 {errors.unionName && <div className={errorStyle}>{errors.unionName}</div>}
               </div>
 
-              {/* 9. উপজেলার নাম (Upazila Name) */}
               <div className="w-full">
                 <label htmlFor="upazila" className={labelStyle}>উপজেলার নাম (Upazila Name) <span className="text-red-500">*</span></label>
                 <input
@@ -475,7 +479,6 @@ const HomePage = () => {
                 {errors.upazila && <div className={errorStyle}>{errors.upazila}</div>}
               </div>
 
-              {/* 10. জেলার নাম (District Name) */}
               <div className="w-full">
                 <label htmlFor="district" className={labelStyle}>জেলার নাম (District Name) <span className="text-red-500">*</span></label>
                 <input
@@ -490,7 +493,6 @@ const HomePage = () => {
                 {errors.district && <div className={errorStyle}>{errors.district}</div>}
               </div>
 
-              {/* 11. পরিবারের সদস্য সংখ্যা (Number of Family Members) */}
               <div className="w-full">
                 <label htmlFor="familyMembers" className={labelStyle}>পরিবারের সদস্য সংখ্যা (Number of Family Members) <span className="text-red-500">*</span></label>
                 <input
@@ -505,7 +507,6 @@ const HomePage = () => {
                 {errors.familyMembers && <div className={errorStyle}>{errors.familyMembers}</div>}
               </div>
 
-              {/* 12. আয়ের উৎস (Source of Income) */}
               <div className="w-full">
                 <label htmlFor="incomeSource" className={labelStyle}>আয়ের উৎস (Source of Income) <span className="text-red-500">*</span></label>
                 <select
@@ -524,7 +525,6 @@ const HomePage = () => {
                 {errors.incomeSource && <div className={errorStyle}>{errors.incomeSource}</div>}
               </div>
 
-              {/* 13. মাসিক আয় (Monthly Income) */}
               <div className="w-full">
                 <label htmlFor="monthlyIncome" className={labelStyle}>মাসিক আয় (Monthly Income) <span className="text-red-500">*</span></label>
                 <select
@@ -543,7 +543,6 @@ const HomePage = () => {
                 {errors.monthlyIncome && <div className={errorStyle}>{errors.monthlyIncome}</div>}
               </div>
               
-              {/* 14. জমির পরিমান (শতাংশ) (Land Amount in Decimals) */}
               <div className="w-full">
                 <label htmlFor="landAmount" className={labelStyle}>জমির পরিমান (শতাংশ) (Land Amount in Decimals) <span className="text-red-500">*</span></label>
                 <input
@@ -558,7 +557,6 @@ const HomePage = () => {
                 {errors.landAmount && <div className={errorStyle}>{errors.landAmount}</div>}
               </div>
 
-              {/* 15. বাড়ীর ধরন (Type of House) */}
               <div className="w-full">
                 <label htmlFor="houseType" className={labelStyle}>বাড়ীর ধরন (Type of House) <span className="text-red-500">*</span></label>
                 <select
@@ -577,7 +575,6 @@ const HomePage = () => {
                 {errors.houseType && <div className={errorStyle}>{errors.houseType}</div>}
               </div>
 
-              {/* 16. শৌচাগারের ধরন (Type of Toilet) */}
               <div className="w-full">
                 <label htmlFor="toiletType" className={labelStyle}>শৌচাগারের ধরন (Type of Toilet) <span className="text-red-500">*</span></label>
                 <select
@@ -597,7 +594,6 @@ const HomePage = () => {
               </div>
             </div>
 
-            {/* 17. খাবার পানি সংগ্রহের উৎস (Source of Drinking Water) - Checkbox Field */}
             <div className="mt-6 md:col-span-2">
               <label className="block text-sm font-medium text-gray-700">খাবার পানি সংগ্রহের উৎস (Source of Drinking Water) <span className="text-red-500">*</span></label>
               <div className={`mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ${errors.drinkingWaterSource ? 'border border-red-500 rounded-lg p-2' : ''}`}>
@@ -618,9 +614,7 @@ const HomePage = () => {
               {errors.drinkingWaterSource && <div className={errorStyle}>{errors.drinkingWaterSource}</div>}
             </div>
 
-            {/* Remaining Dropdown Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              {/* 18. সন্তান সংখ্যা (Number of Children) */}
               <div className="w-full">
                 <label htmlFor="childrenCount" className={labelStyle}>সন্তান সংখ্যা (Number of Children) <span className="text-red-500">*</span></label>
                 <select
@@ -638,7 +632,6 @@ const HomePage = () => {
                 {errors.childrenCount && <div className={errorStyle}>{errors.childrenCount}</div>}
               </div>
 
-              {/* 19. ছেলে সন্তান সংখ্যা (Number of Male Children) */}
               <div className="w-full">
                 <label htmlFor="maleChildrenCount" className={labelStyle}>ছেলে সন্তান সংখ্যা (Number of Male Children) <span className="text-red-500">*</span></label>
                 <select
@@ -656,7 +649,6 @@ const HomePage = () => {
                 {errors.maleChildrenCount && <div className={errorStyle}>{errors.maleChildrenCount}</div>}
               </div>
               
-              {/* 20. মেয়ে সন্তান সংখ্যা (Number of Female Children) */}
               <div className="w-full">
                 <label htmlFor="femaleChildrenCount" className={labelStyle}>মেয়ে সন্তান সংখ্যা (Number of Female Children) <span className="text-red-500">*</span></label>
                 <select
@@ -674,7 +666,6 @@ const HomePage = () => {
                 {errors.femaleChildrenCount && <div className={errorStyle}>{errors.femaleChildrenCount}</div>}
               </div>
 
-              {/* 21. অনুদানসামগ্রী যা লাগবে (Donation Items Needed) */}
               <div className="w-full">
                 <label htmlFor="donationItems" className={labelStyle}>অনুদানসামগ্রী যা লাগবে (Donation Items Needed) <span className="text-red-500">*</span></label>
                 <select
@@ -695,7 +686,6 @@ const HomePage = () => {
                   
             </div>
 
-            {/* 22. আবেদন ফি জমা দিন (Submit Button) */}
             <div className="mt-12 w-full flex justify-center">
               <button
                 type="submit"
@@ -729,7 +719,10 @@ const HomePage = () => {
           )}
 
           {paymentMessage && (
-            <div className="mt-6 p-4 text-center text-lg font-semibold text-red-700 bg-red-100 rounded-lg">
+            <div 
+              data-payment-error
+              className="mt-6 p-4 text-center text-lg font-semibold text-red-700 bg-red-100 rounded-lg"
+            >
               {paymentMessage}
               <button 
                 onClick={() => setPaymentMessage(null)}
@@ -762,7 +755,6 @@ const HomePage = () => {
       <footer className="bg-gray-900 text-white py-12 border-t border-gray-700">
         <div className="container mx-auto px-6 md:px-12 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {/* Organization Section */}
             <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
               <a href="#" title="Go to homepage" className="transition-transform duration-300 hover:scale-105">
                 <Image
@@ -785,7 +777,6 @@ const HomePage = () => {
               </div>
             </div>
             
-            {/* Main Office Section */}
             <div className="text-center">
               <h4 className="font-semibold text-lg mb-4 text-white border-b border-gray-600 pb-2 inline-block">
                 Main Office
@@ -800,7 +791,6 @@ const HomePage = () => {
               </div>
             </div>
             
-            {/* Contact Section */}
             <div className="text-center md:text-left">
               <h4 className="font-semibold text-lg mb-4 text-white border-b border-gray-600 pb-2 inline-block">
                 Contact
@@ -820,7 +810,6 @@ const HomePage = () => {
             </div>
           </div>
           
-          {/* Copyright Section */}
           <div className="border-t border-gray-700 mt-10 pt-6">
             <div className="text-center">
               <p className="text-xs text-gray-400 leading-relaxed">

@@ -42,12 +42,6 @@ async function createBkashPayment(token: string, amount: number, transactionId: 
     merchantInvoiceNumber: `UFO-${transactionId}-${Date.now()}`
   };
   
-  console.log('DEBUG: bKash Payment Payload:', paymentPayload);
-  console.log('DEBUG: bKash Config:', {
-    base_url: BKASH_CONFIG.base_url,
-    app_key: BKASH_CONFIG.app_key ? 'Present' : 'Missing',
-    token: token ? 'Present' : 'Missing'
-  });
   
   const response = await fetch(`${BKASH_CONFIG.base_url}/tokenized/checkout/create`, {
     method: 'POST',
@@ -61,7 +55,6 @@ async function createBkashPayment(token: string, amount: number, transactionId: 
   });
 
   const data = await response.json();
-  console.log('DEBUG: bKash Response:', data);
   
   if (data.statusCode === '0000') {
     return {
@@ -70,7 +63,6 @@ async function createBkashPayment(token: string, amount: number, transactionId: 
       merchantInvoiceNumber: `UFO-${transactionId}-${Date.now()}`
     };
   } else {
-    console.log('DEBUG: bKash Error Response:', data);
     throw new Error(data.statusMessage || 'Failed to create bKash payment');
   }
 }
@@ -79,14 +71,6 @@ export async function POST(request: NextRequest) {
   try {
     const { transactionId, amount = getApplicationFee() } = await request.json();
     
-    console.log('DEBUG: bKash Payment Request:', {
-      transactionId,
-      amount,
-      amountType: typeof amount,
-      configFee: getApplicationFee(),
-      configFeeType: typeof getApplicationFee()
-    });
-    
     if (!transactionId) {
       return NextResponse.json(
         { success: false, message: 'Transaction ID is required' },
@@ -94,9 +78,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    console.log('DEBUG: Getting bKash token...');
     const token = await getBkashToken();
-    console.log('DEBUG: Token received, creating payment...');
     
     const paymentData = await createBkashPayment(token, amount, transactionId);
     const { prisma } = await import('@/lib/prisma');

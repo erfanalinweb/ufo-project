@@ -16,7 +16,6 @@ const SuccessPage = () => {
         `}
       </style>
       
-      {/* Header Section */}
       <header className="bg-gradient-to-r from-blue-800 to-indigo-800 text-white p-6 md:p-8 shadow-lg">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <Link href="/" className="flex items-center space-x-4 md:space-x-6" title="Go to homepage">
@@ -39,10 +38,8 @@ const SuccessPage = () => {
         </div>
       </header>
 
-      {/* Main Success Content */}
       <main className="container mx-auto p-4 md:p-8 flex-grow flex items-center justify-center">
         <div className="bg-white shadow-2xl rounded-3xl p-8 md:p-12 max-w-2xl mx-auto text-center border-t-8 border-green-600">
-          {/* Success Icon */}
           <div className="mb-8">
             <div className="mx-auto w-24 h-24 bg-green-100 rounded-full flex items-center justify-center">
               <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +48,6 @@ const SuccessPage = () => {
             </div>
           </div>
 
-          {/* Success Message */}
           <h2 className="text-3xl md:text-4xl font-bold text-green-700 mb-6">
             সফল!
           </h2>
@@ -60,7 +56,6 @@ const SuccessPage = () => {
             সঠিক তথ্য দিয়ে আবেদনের জন্য আপনাকে ধন্যবাদ।
           </p>
 
-          {/* Home Button */}
           <Link 
             href="/"
             className="inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105"
@@ -70,7 +65,6 @@ const SuccessPage = () => {
         </div>
       </main>
 
-      {/* Footer Section */}
       <footer className="bg-gray-900 text-white py-12 border-t border-gray-700">
         <div className="container mx-auto px-6 md:px-12 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
@@ -97,7 +91,6 @@ const SuccessPage = () => {
               </div>
             </div>
             
-            {/* Main Office Section */}
             <div className="text-center">
               <h4 className="font-semibold text-lg mb-4 text-white border-b border-gray-600 pb-2 inline-block">
                 Main Office
@@ -112,7 +105,6 @@ const SuccessPage = () => {
               </div>
             </div>
             
-            {/* Contact Section */}
             <div className="text-center md:text-left">
               <h4 className="font-semibold text-lg mb-4 text-white border-b border-gray-600 pb-2 inline-block">
                 Contact
@@ -132,7 +124,6 @@ const SuccessPage = () => {
             </div>
           </div>
           
-          {/* Copyright Section */}
           <div className="border-t border-gray-700 mt-10 pt-6">
             <div className="text-center">
               <p className="text-xs text-gray-400 leading-relaxed">

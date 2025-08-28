@@ -7,16 +7,8 @@ export async function GET(request: NextRequest) {
     const paymentID = searchParams.get('paymentID');
     const status = searchParams.get('status');
     
-    // Debug: Log callback parameters
-    console.log('bKash Callback received:', {
-      paymentID,
-      status,
-      fullURL: request.url,
-      allParams: Object.fromEntries(searchParams.entries())
-    });
     
     if (status === 'success' && paymentID) {
-      // Execute payment
       const executeResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/bkash/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -27,17 +19,11 @@ export async function GET(request: NextRequest) {
       
       const executeData = await executeResponse.json();
       
-      // Debug: Log execute response
-      console.log('Execute API Response:', executeData);
       
       if (executeData.success) {
-        console.log('Payment execution successful, redirecting to success');
         return redirect('/success');
       } else {
-        // Log the error but still redirect to success if payment was processed
-        console.error('Execute API failed but payment may have been processed:', executeData);
         
-        // Check if transaction exists and is completed
         const { prisma } = await import('@/lib/prisma');
         const transaction = await prisma.transaction.findFirst({
           where: { bkashPaymentId: paymentID }
@@ -50,7 +36,6 @@ export async function GET(request: NextRequest) {
         }
       }
     } else {
-      // Payment failed or cancelled
       const { prisma } = await import('@/lib/prisma');
       
       if (paymentID) {
@@ -72,7 +57,6 @@ export async function GET(request: NextRequest) {
       throw error; // Re-throw redirect errors
     }
     
-    console.error('Error in bKash callback:', error);
     return redirect('/?payment=error');
   }
 }

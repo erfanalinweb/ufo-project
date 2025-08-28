@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
-    // Validate credentials
     if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
       return NextResponse.json(
         { success: false, message: 'Invalid credentials' },
@@ -31,7 +30,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Login error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
       { status: 500 }
