@@ -1,0 +1,41 @@
+{
+  "name": "ufo-form",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.15.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/sqlite3": "^3.1.11",
+    "jsonwebtoken": "^9.0.2",
+    "next": "15.5.2",
+    "prisma": "^6.15.0",
+    "react": "19.1.0",
+    "react-datepicker": "^8.7.0",
+    "react-dom": "19.1.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
